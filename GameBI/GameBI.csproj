@@ -41,7 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Model\Class1.cs" />
+    <Compile Include="Model\ActiveAbility\AttackIncrease.cs" />
+    <Compile Include="Model\ActiveAbility\Heal.cs" />
+    <Compile Include="Model\Character.cs" />
+    <Compile Include="Model\ActiveAbility\IActiveAbility.cs" />
+    <Compile Include="Model\Game.cs" />
+    <Compile Include="Model\Map.cs" />
+    <Compile Include="Model\PassiveAbility\IPassiveAbility.cs" />
+    <Compile Include="Model\PassiveAbility\PassiveAttackIncrease.cs" />
+    <Compile Include="Model\PassiveAbility\PassiveHeal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
