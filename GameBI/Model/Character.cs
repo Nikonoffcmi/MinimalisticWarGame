@@ -6,18 +6,26 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model
 {
+    public enum PlayersCharacter
+    {
+        PlayerOne,
+        PlayerTwo,
+    }
     public class Character
     {
         public int HPModified { get; set; }
         public int DamageModified { get; set; }
-        public int DistanceMoveModified { get; set; }
+        public (int, int) Location { get; set; }
+        public PlayersCharacter PlayerCharacter { get; private set; }
+
 
         private string Name;
         private int HP;
         private int damage;
-        private int distanceMove;
+        public int distanceMove { get; private set; }
+        public int distanceDamage { get; private set; }
         private List<IPassiveAbility> passiveAbilities;
-        private List<IActiveAbility> ActiveAbilities { get; set; }
+        public List<IActiveAbility> ActiveAbilities { get; set; }
 
         public void Attack(Character character)
         {
