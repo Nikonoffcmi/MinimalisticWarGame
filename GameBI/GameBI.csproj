@@ -43,9 +43,11 @@
   <ItemGroup>
     <Compile Include="Model\ActiveAbility\AttackIncrease.cs" />
     <Compile Include="Model\ActiveAbility\Heal.cs" />
-    <Compile Include="Model\Character.cs" />
+    <Compile Include="Model\GameObjects\Barrier.cs" />
+    <Compile Include="Model\GameObjects\Character.cs" />
     <Compile Include="Model\ActiveAbility\IActiveAbility.cs" />
     <Compile Include="Model\Game.cs" />
+    <Compile Include="Model\GameObjects\GameObject.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\PassiveAbility\IPassiveAbility.cs" />
     <Compile Include="Model\PassiveAbility\PassiveAttackIncrease.cs" />

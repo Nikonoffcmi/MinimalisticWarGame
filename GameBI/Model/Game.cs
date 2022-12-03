@@ -12,37 +12,29 @@ namespace GameBI.Model
         private Character[] charactersPlayerTwo;
         private Character[] currPlayer;
         private Map map;
-        private bool IsSelected = false;
+        private Character SelectedCh;
         public Game()
         {
             charactersPlayerOne = new Character[5];
             charactersPlayerTwo = new Character[5];
             currPlayer = charactersPlayerOne;
-            map = new Map(15, 15, charactersPlayerOne, charactersPlayerTwo);
+            map = new Map(15, 15);
         }
 
-        
+
         public List<(int, int)> StartGame()
         {
-            map.SetCharacters(charactersPlayerOne);
-            map.SetCharacters(charactersPlayerTwo);
-            map.SetBarriers();
-            return currPlayer.Select(ch => ch.Location).ToList();
+            
         }
 
-        public List<(int, int)> CharacterMove ((int, int) location)
+        public List<(int, int)> CharacterMove((int, int) location)
         {
-            if (!IsSelected)
+            if (SelectedCh != null)
             {
-                IsSelected = true;
-                return map.AvailableMovements(currPlayer.ToList().Find(ch => ch.Location == location)
-                                , currPlayer.ToList().Find(ch => ch.Location == location).distanceMove);
+                return currPlayer.ToList().Find(ch => ch.GetLocation() == location).AvailableMovements(map);
             }
-            else
-            {
-                IsSelected = false;
-
-            }
+            IsSelected = false;
+            
         }
 
         public List<(int, int)> CharacterAttacks((int, int) location)
