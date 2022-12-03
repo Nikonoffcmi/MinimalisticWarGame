@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model
 {
-    public enum CellField
-    {
-        Empty,
-        Barrier,
-        Character
-    }
+    
     public class Map
     {
         public CellField[,] map { get; private set; }
