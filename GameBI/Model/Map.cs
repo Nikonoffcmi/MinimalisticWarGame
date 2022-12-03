@@ -78,6 +78,15 @@ namespace GameBI.Model
             return list;
         }
 
+        public void SetEmptyCell(List<(int, int)> emptyCells)
+        {
+            foreach (var emptyCell in emptyCells)
+            {
+                if (emptyCell.Item2 < map.GetLength(1) && emptyCell.Item1 < map.GetLength(0))
+                    map[emptyCell.Item2, emptyCell.Item1] = CellField.Empty;
+            }
+        }
+
         public void SetBarriers (List<(int, int)> barriers)
         {
             foreach (var barrier in barriers)
