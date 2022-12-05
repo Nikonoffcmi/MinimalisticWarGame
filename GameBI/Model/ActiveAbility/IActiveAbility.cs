@@ -11,6 +11,7 @@ namespace GameBI.Model
     {
         string Name { get; }
         int turnNext { get; set; }
-        void ActivatePassiveAbility(Character character);
+        void ActivateActiveAbility(Map map, Character character);
+        List<(int, int)> AbilityDistance(Map map);
     }
 }

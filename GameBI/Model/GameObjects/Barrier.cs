@@ -9,5 +9,9 @@ namespace GameBI.Model.GameObjects
     internal class Barrier
         :GameObject
     {
+        public Barrier((int, int) location)
+            : base(location)
+        {
+        }
     }
 }

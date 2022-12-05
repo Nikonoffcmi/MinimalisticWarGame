@@ -22,9 +22,14 @@ namespace GameBI.Model.ActiveAbility
             this.attackIncrease = attackIncrease;
         }
 
-        public void ActivatePassiveAbility(Character character)
+        public void ActivateActiveAbility(Map map, Character character)
         {
             character.DamageModified = +attackIncrease;
+        }
+
+        public List<(int, int)> AbilityDistance(Map map)
+        {
+            return null;
         }
     }
 }

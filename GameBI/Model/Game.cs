@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameBI.Model.GameObjects;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,7 +13,9 @@ namespace GameBI.Model
         private Character[] charactersPlayerTwo;
         private Character[] currPlayer;
         private Map map;
-        private Character SelectedCh;
+        private Character currCharater;
+        private IActiveAbility currActiveAbility;
+        public bool isGameEnd = false;
         public Game()
         {
             charactersPlayerOne = new Character[5];
@@ -21,43 +24,115 @@ namespace GameBI.Model
             map = new Map(15, 15);
         }
 
-
-        public List<(int, int)> StartGame()
+        public void AddCharacterPlayerOne(Character character)
         {
-            
+            for (int i = 0; i < charactersPlayerOne.Length; i++)
+                if (charactersPlayerOne[i] == null)
+                {
+                    charactersPlayerOne[i] = character;
+                    charactersPlayerOne[i].SetLocation(map, (map.map.GetLength(0), i));
+                    break;
+                }
         }
 
-        public List<(int, int)> CharacterMove((int, int) location)
+        public void AddCharacterPlayerTwo(Character character)
         {
-            if (SelectedCh != null)
+            for (int i = 0; i < charactersPlayerTwo.Length; i++)
+                if (charactersPlayerTwo[i] == null)
+                {
+                    charactersPlayerTwo[i] = character;
+                    charactersPlayerTwo[i].SetLocation(map, (0, map.map.GetLength(0) - i));
+                    break;
+                }
+        }
+
+        public List<(int, int)> StartGame(List<(int, int)> barrierLocation)
+        {
+            map.SetCell(charactersPlayerOne.ToList<GameObject>());
+            map.SetCell(charactersPlayerTwo.ToList<GameObject>());
+            var barriers = new List<Barrier>(barrierLocation.Count);
+            for (int i = 0; i < barrierLocation.Count; i++)
+                barriers.Add(new Barrier(barrierLocation[i]));
+            map.SetCell(barriers.ToList<GameObject>());
+
+            currPlayer = charactersPlayerOne;
+            return currPlayer.Select(ch => ch.location).ToList();
+        }
+
+        public List<(int, int)> OnCharacterPress((int, int) location)
+        {
+            if (currCharater == null)
             {
-                return currPlayer.ToList().Find(ch => ch.GetLocation() == location).AvailableMovements(map);
+                currCharater = currPlayer.ToList().Find(ch => ch.location == location);
+                var result = currCharater.AvailableMovements(map);
+                result.AddRange(currCharater.AvailableAttacks(map));
+                return result;
             }
-            IsSelected = false;
-            
-        }
-
-        public List<(int, int)> CharacterAttacks((int, int) location)
-        {
-            return map.AvailableAttacks(currPlayer.ToList().Find(ch => ch.Location == location)
-                , currPlayer.ToList().Find(ch => ch.Location == location).distanceDamage);
+            else
+            {
+                if (map.isCellObject<Character>(location.Item2, location.Item1))
+                {
+                    var ch = charactersPlayerOne.ToList();
+                    ch.AddRange(charactersPlayerTwo.ToList());
+                    var selCh = ch.Find(chr => chr.location == location);
+                    if (currActiveAbility != null)
+                        currCharater.ActivateAbility(map, selCh, currActiveAbility);
+                    else 
+                        selCh.takeDamage(currCharater.damage);
+                }
+                else if (!map.isCellObject<Barrier>(location.Item2, location.Item1))
+                    currCharater.Move(map, location);
+                currCharater = null;
+                currActiveAbility = null;
+                SwitchPlayer();
+                return currPlayer.Select(ch => ch.location).ToList();
+            }
         }
 
         public List<IActiveAbility> CharacterAbilities((int, int) location)
         {
-            return currPlayer.ToList().Find(ch => ch.Location == location).ActiveAbilities;
+            return currPlayer.ToList().Find(ch => ch.location == location).ActiveAbilities;
         }
 
-        public void Move()
+        public List<(int, int)> ActiveAbilitiesDistans(IActiveAbility activeAbility)
         {
-
+            currActiveAbility = activeAbility;
+            return currCharater.ActiveAbilities.Find(aa => aa.GetType() == activeAbility.GetType()).AbilityDistance(map);
         }
+
+        public List<(int, int)> CancelingSelectedCharacter()
+        {
+            currCharater = null;
+            currActiveAbility = null;
+            return currPlayer.Select(ch => ch.location).ToList();
+        }
+
+        public List<(int, int)> SkipTurn()
+        {
+            SwitchPlayer();
+            return currPlayer.Select(ch => ch.location).ToList();
+        }
+
         private void SwitchPlayer()
         {
             if (currPlayer == charactersPlayerOne)
                 currPlayer = charactersPlayerTwo;
             else
                 currPlayer = charactersPlayerOne;
+
+            var liveCharater = 0; 
+            for (int i = 0; i < currPlayer.Count(); i++)
+            {
+                if (currPlayer[i].IsAlive())
+                {
+                    liveCharater++;
+                    currPlayer[i].NewTurn();
+                }
+                else
+                    currPlayer[i] = null;
+            }
+            if (liveCharater == 0)
+                isGameEnd = true;
         }
     }
 }

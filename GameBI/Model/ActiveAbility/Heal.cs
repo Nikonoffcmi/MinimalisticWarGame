@@ -22,11 +22,16 @@ namespace GameBI.Model.ActiveAbility
             this.heal = heal;
         }
 
-        public void ActivatePassiveAbility(Character character)
+        public void ActivateActiveAbility(Map map, Character character)
         {
             if (turnNext == 0)
                 turnNext = turn;
             character.takeDamage(heal);
+        }
+
+        public List<(int, int)> AbilityDistance(Map map)
+        {
+            return null;
         }
     }
 }

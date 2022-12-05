@@ -9,11 +9,16 @@ namespace GameBI.Model
 {
     public class GameObject
     {
-        protected (int, int) location;
+        public (int, int) location { get; private set; }
 
-        public (int, int) GetLocation()
+        public GameObject ((int, int) location)
         {
-            return location;
+            this.location = location;
+        }
+
+        public void SetLocation (Map map, (int, int) location)
+        {
+            this.location = location;
         }
         
     }

@@ -7,27 +7,26 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model
 {
-    public enum PlayersCharacter
-    {
-        PlayerOne,
-        PlayerTwo,
-    }
     public class Character
         : GameObject
     {
         public int HPModified { get; set; }
         public int DamageModified { get; set; }
-        public PlayersCharacter PlayerCharacter { get; private set; }
 
 
         private string Name;
         private int HP;
-        private int damage;
+        public int damage { get; private set; }
 
         private int distanceMove;
         private int distanceAttack;
         public int distanceDamage { get; private set; }
         private List<IPassiveAbility> passiveAbilities;
+
+        public Character((int, int) location) : base(location)
+        {
+        }
+
         public List<IActiveAbility> ActiveAbilities { get; set; }
 
         public void takeDamage(int damage)
@@ -35,13 +34,13 @@ namespace GameBI.Model
             this.HP -= damage;
         }
 
-        public void ActivateAbility(Character character, IActiveAbility activeAbility)
+        public void ActivateAbility(Map map, Character character, IActiveAbility activeAbility)
         {
             if (!ActiveAbilities.Contains(activeAbility))
                 return;
             ActiveAbilities
                 .Find(aa => aa.GetType() == typeof(IActiveAbility))
-                .ActivatePassiveAbility(character);
+                .ActivateActiveAbility(map, character);
         }
 
         public List<(int, int)> AvailableMovements(Map map)
@@ -101,7 +100,7 @@ namespace GameBI.Model
         public void Move(Map map, (int, int) toLocation)
         {
             if (AvailableMovements(map).Contains(toLocation))
-                location = toLocation;
+                SetLocation(map, toLocation);
         }
 
         public List<(int, int)> AvailableAttacks(Map map)
@@ -156,6 +155,18 @@ namespace GameBI.Model
                     list.Add((location.Item2 + y, location.Item1 + x));
             }
             return list;
+        }
+
+        public bool IsAlive()
+        {
+            if (HPModified < 0)
+                return false;
+            return true;
+        }
+
+        public void NewTurn()
+        {
+            passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(null));
         }
     }
 }
