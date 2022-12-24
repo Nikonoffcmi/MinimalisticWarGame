@@ -17,9 +17,9 @@ namespace GameBI.Model
         }
 
         
-        public void SetCell(List<GameObject> gameObject)
+        public void SetCell(List<GameObject> gameObjects)
         {
-            foreach (var emptyCell in gameObject)
+            foreach (var emptyCell in gameObjects)
             {
                 if (emptyCell.location.Item2 < map.GetLength(1) && emptyCell.location.Item1 < map.GetLength(0))
                     map[emptyCell.location.Item2, emptyCell.location.Item1] = emptyCell;

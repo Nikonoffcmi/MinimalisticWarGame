@@ -9,13 +9,13 @@ namespace GameBI.Model
 {
     public class Game
     {
+        public bool isGameEnd = true;
         private Character[] charactersPlayerOne;
         private Character[] charactersPlayerTwo;
         private Character[] currPlayer;
         private Map map;
         private Character currCharater;
         private IActiveAbility currActiveAbility;
-        public bool isGameEnd = false;
         public Game()
         {
             charactersPlayerOne = new Character[5];
@@ -55,6 +55,7 @@ namespace GameBI.Model
                 barriers.Add(new Barrier(barrierLocation[i]));
             map.SetCell(barriers.ToList<GameObject>());
 
+            isGameEnd = false;
             currPlayer = charactersPlayerOne;
             return currPlayer.Select(ch => ch.location).ToList();
         }

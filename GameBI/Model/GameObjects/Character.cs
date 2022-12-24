@@ -20,7 +20,6 @@ namespace GameBI.Model
 
         private int distanceMove;
         private int distanceAttack;
-        public int distanceDamage { get; private set; }
         private List<IPassiveAbility> passiveAbilities;
 
         public Character((int, int) location) : base(location)
