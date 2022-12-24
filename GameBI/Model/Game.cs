@@ -3,12 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace GameBI.Model
 {
     public class Game
     {
+        public List<Object> objects;
         public bool isGameEnd = true;
         private Character[] charactersPlayerOne;
         private Character[] charactersPlayerTwo;
@@ -16,12 +18,15 @@ namespace GameBI.Model
         private Map map;
         private Character currCharater;
         private IActiveAbility currActiveAbility;
+
+        public List<Character> Characters { get => new List<Character>(charactersPlayerOne.ToList()); }
         public Game()
         {
             charactersPlayerOne = new Character[5];
             charactersPlayerTwo = new Character[5];
             currPlayer = charactersPlayerOne;
             map = new Map(15, 15);
+            objects = new List<Object>();
         }
 
         public void AddCharacterPlayerOne(Character character)
@@ -33,6 +38,7 @@ namespace GameBI.Model
                     charactersPlayerOne[i].SetLocation(map, (map.map.GetLength(0), i));
                     break;
                 }
+            objects.Add(character);
         }
 
         public void AddCharacterPlayerTwo(Character character)
@@ -46,14 +52,17 @@ namespace GameBI.Model
                 }
         }
 
-        public List<(int, int)> StartGame(List<(int, int)> barrierLocation)
+        public void AddGameBarrier(GameBarrier gameBarrier)
         {
-            map.SetCell(charactersPlayerOne.ToList<GameObject>());
-            map.SetCell(charactersPlayerTwo.ToList<GameObject>());
-            var barriers = new List<Barrier>(barrierLocation.Count);
-            for (int i = 0; i < barrierLocation.Count; i++)
-                barriers.Add(new Barrier(barrierLocation[i]));
-            map.SetCell(barriers.ToList<GameObject>());
+            var barriers = new List<GameBarrier>() { gameBarrier};
+            map.SetCell(barriers.ToList<Object>());
+            objects.Add(gameBarrier);
+        }
+
+        public List<(int, int)> StartGame()
+        {
+            map.SetCell(charactersPlayerOne.ToList<Object>());
+            map.SetCell(charactersPlayerTwo.ToList<Object>());
 
             isGameEnd = false;
             currPlayer = charactersPlayerOne;
@@ -92,13 +101,15 @@ namespace GameBI.Model
 
         public List<IActiveAbility> CharacterAbilities((int, int) location)
         {
-            return currPlayer.ToList().Find(ch => ch.location == location).ActiveAbilities;
+            return new List<IActiveAbility>();
+            //return currPlayer.ToList().Find(ch => ch.location == location).ActiveAbilities;
         }
 
         public List<(int, int)> ActiveAbilitiesDistans(IActiveAbility activeAbility)
         {
             currActiveAbility = activeAbility;
-            return currCharater.ActiveAbilities.Find(aa => aa.GetType() == activeAbility.GetType()).AbilityDistance(map);
+            return new List<(int, int)>();
+            //return currCharater.ActiveAbilities.Find(aa => aa.GetType() == activeAbility.GetType()).AbilityDistance(map);
         }
 
         public List<(int, int)> CancelingSelectedCharacter()

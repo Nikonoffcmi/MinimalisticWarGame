@@ -4,16 +4,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GameBI.Model
 {
-    public class GameObject
+    public class Object
     {
+        public string name;
+        public string texture;
+        public Vector pos;
+        public Vector size;
+
+
         public (int, int) location { get; private set; }
 
-        public GameObject ((int, int) location)
+        public Object (string name, (int, int) location)
         {
+            this.name = name;
             this.location = location;
+        }
+
+        public Object()
+        {
         }
 
         public void SetLocation (Map map, (int, int) location)

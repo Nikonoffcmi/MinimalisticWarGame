@@ -39,15 +39,16 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Model\ActiveAbility\AttackIncrease.cs" />
     <Compile Include="Model\ActiveAbility\Heal.cs" />
-    <Compile Include="Model\GameObjects\Barrier.cs" />
+    <Compile Include="Model\GameObjects\GameBarrier.cs" />
     <Compile Include="Model\GameObjects\Character.cs" />
     <Compile Include="Model\ActiveAbility\IActiveAbility.cs" />
     <Compile Include="Model\Game.cs" />
-    <Compile Include="Model\GameObjects\GameObject.cs" />
+    <Compile Include="Model\GameObjects\Object.cs" />
     <Compile Include="Model\Map.cs" />
     <Compile Include="Model\PassiveAbility\IPassiveAbility.cs" />
     <Compile Include="Model\PassiveAbility\PassiveAttackIncrease.cs" />

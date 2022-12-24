@@ -9,15 +9,15 @@ namespace GameBI.Model
     
     public class Map
     {
-        public GameObject[,] map { get; private set; }
+        public Object[,] map { get; private set; }
 
         public Map (int y, int x)
         {
-            map = new GameObject[y, x];
+            map = new Object[y, x];
         }
 
         
-        public void SetCell(List<GameObject> gameObjects)
+        public void SetCell(List<Object> gameObjects)
         {
             foreach (var emptyCell in gameObjects)
             {

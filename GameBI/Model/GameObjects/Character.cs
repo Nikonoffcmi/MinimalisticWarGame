@@ -8,25 +8,47 @@ using System.Threading.Tasks;
 namespace GameBI.Model
 {
     public class Character
-        : GameObject
+        : Object
     {
         public int HPModified { get; set; }
         public int DamageModified { get; set; }
 
-
-        private string Name;
         private int HP;
         public int damage { get; private set; }
 
         private int distanceMove;
         private int distanceAttack;
-        private List<IPassiveAbility> passiveAbilities;
+        //private List<IPassiveAbility> passiveAbilities;
+        //public List<IActiveAbility> ActiveAbilities { get; set; }
 
-        public Character((int, int) location) : base(location)
+        public Character()
         {
         }
 
-        public List<IActiveAbility> ActiveAbilities { get; set; }
+        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, (int, int) location) 
+            : base(name, location)
+        {
+            HPModified = hp;
+            DamageModified = damage;
+            HP = hp;
+            this.damage = damage;
+            this.distanceMove = distanceMove;
+            this.distanceAttack = distanceAttack;
+        }
+
+        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, 
+            List<IPassiveAbility> passiveAbilities, List<IActiveAbility> activeAbilities, (int, int) location) 
+            : base(name, location)
+        {
+            HPModified = hp;
+            DamageModified = damage;
+            HP = hp;
+            this.damage = damage;
+            this.distanceMove = distanceMove;
+            this.distanceAttack = distanceAttack;
+            //this.passiveAbilities = passiveAbilities;
+            //ActiveAbilities = activeAbilities;
+        }
 
         public void takeDamage(int damage)
         {
@@ -35,11 +57,11 @@ namespace GameBI.Model
 
         public void ActivateAbility(Map map, Character character, IActiveAbility activeAbility)
         {
-            if (!ActiveAbilities.Contains(activeAbility))
+            /*if (!ActiveAbilities.Contains(activeAbility))
                 return;
             ActiveAbilities
                 .Find(aa => aa.GetType() == typeof(IActiveAbility))
-                .ActivateActiveAbility(map, character);
+                .ActivateActiveAbility(map, character);*/
         }
 
         public List<(int, int)> AvailableMovements(Map map)
@@ -50,7 +72,7 @@ namespace GameBI.Model
             for (y = 0; y < map.map.GetLength(0); y++)
                 for (x = 0; x < map.map.GetLength(1); x++)
                 {
-                    if (map.map[y, x].GetType() == typeof(Character) || map.map[y, x].GetType() == typeof(Barrier))
+                    if (map.map[y, x].GetType() == typeof(Character) || map.map[y, x].GetType() == typeof(GameBarrier))
                         cMap[y, x] = -2;//индикатор стены или персонажа
                     else
                         cMap[y, x] = -1;//индикатор еще не ступали сюда
@@ -165,7 +187,7 @@ namespace GameBI.Model
 
         public void NewTurn()
         {
-            passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(null));
+            //passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(null));
         }
     }
 }

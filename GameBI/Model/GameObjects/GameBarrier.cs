@@ -6,11 +6,15 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model.GameObjects
 {
-    internal class Barrier
-        :GameObject
+    public class GameBarrier
+        :Object
     {
-        public Barrier((int, int) location)
-            : base(location)
+        public GameBarrier(string name,(int, int) location)
+            : base(name, location)
+        {
+        }
+
+        GameBarrier()
         {
         }
     }
