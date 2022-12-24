@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GameBI.Model
 {
@@ -19,13 +20,14 @@ namespace GameBI.Model
         private Character currCharater;
         private IActiveAbility currActiveAbility;
 
+        public Vector mapSize { get => new Vector(map.map.GetLength(0), map.map.GetLength(1)); }
         public List<Character> Characters { get => new List<Character>(charactersPlayerOne.ToList()); }
         public Game()
         {
             charactersPlayerOne = new Character[5];
             charactersPlayerTwo = new Character[5];
             currPlayer = charactersPlayerOne;
-            map = new Map(15, 15);
+            map = new Map(10, 10);
             objects = new List<Object>();
         }
 
@@ -59,45 +61,45 @@ namespace GameBI.Model
             objects.Add(gameBarrier);
         }
 
-        public List<(int, int)> StartGame()
+        public List<Vector> StartGame()
         {
             map.SetCell(charactersPlayerOne.ToList<Object>());
             map.SetCell(charactersPlayerTwo.ToList<Object>());
 
             isGameEnd = false;
             currPlayer = charactersPlayerOne;
-            return currPlayer.Select(ch => ch.location).ToList();
+            return currPlayer.Select(ch => ch.pos).ToList();
         }
 
-        public List<(int, int)> OnCharacterPress((int, int) location)
-        {
-            if (currCharater == null)
-            {
-                currCharater = currPlayer.ToList().Find(ch => ch.location == location);
-                var result = currCharater.AvailableMovements(map);
-                result.AddRange(currCharater.AvailableAttacks(map));
-                return result;
-            }
-            else
-            {
-                if (map.isCellObject<Character>(location.Item2, location.Item1))
-                {
-                    var ch = charactersPlayerOne.ToList();
-                    ch.AddRange(charactersPlayerTwo.ToList());
-                    var selCh = ch.Find(chr => chr.location == location);
-                    if (currActiveAbility != null)
-                        currCharater.ActivateAbility(map, selCh, currActiveAbility);
-                    else 
-                        selCh.takeDamage(currCharater.damage);
-                }
-                else if (!map.isCellObject<Barrier>(location.Item2, location.Item1))
-                    currCharater.Move(map, location);
-                currCharater = null;
-                currActiveAbility = null;
-                SwitchPlayer();
-                return currPlayer.Select(ch => ch.location).ToList();
-            }
-        }
+        //public List<Vector> OnCharacterPress(Vector location)
+        //{
+        //    if (currCharater == null)
+        //    {
+        //        currCharater = currPlayer.ToList().Find(ch => ch.pos == location);
+        //        var result = currCharater.AvailableMovements(map);
+        //        result.AddRange(currCharater.AvailableAttacks(map));
+        //        return result;
+        //    }
+        //    else
+        //    {
+        //        if (map.isCellObject<Character>(location.Item2, location.Item1))
+        //        {
+        //            var ch = charactersPlayerOne.ToList();
+        //            ch.AddRange(charactersPlayerTwo.ToList());
+        //            var selCh = ch.Find(chr => chr.location == location);
+        //            if (currActiveAbility != null)
+        //                currCharater.ActivateAbility(map, selCh, currActiveAbility);
+        //            else 
+        //                selCh.takeDamage(currCharater.damage);
+        //        }
+        //        else if (!map.isCellObject<Barrier>(location.Item2, location.Item1))
+        //            currCharater.Move(map, location);
+        //        currCharater = null;
+        //        currActiveAbility = null;
+        //        SwitchPlayer();
+        //        return currPlayer.Select(ch => ch.location).ToList();
+        //    }
+        //}
 
         public List<IActiveAbility> CharacterAbilities((int, int) location)
         {
@@ -112,18 +114,18 @@ namespace GameBI.Model
             //return currCharater.ActiveAbilities.Find(aa => aa.GetType() == activeAbility.GetType()).AbilityDistance(map);
         }
 
-        public List<(int, int)> CancelingSelectedCharacter()
-        {
-            currCharater = null;
-            currActiveAbility = null;
-            return currPlayer.Select(ch => ch.location).ToList();
-        }
+        //public List<(int, int)> CancelingSelectedCharacter()
+        //{
+        //    currCharater = null;
+        //    currActiveAbility = null;
+        //    return currPlayer.Select(ch => ch.location).ToList();
+        //}
 
-        public List<(int, int)> SkipTurn()
-        {
-            SwitchPlayer();
-            return currPlayer.Select(ch => ch.location).ToList();
-        }
+        //public List<(int, int)> SkipTurn()
+        //{
+        //    SwitchPlayer();
+        //    return currPlayer.Select(ch => ch.location).ToList();
+        //}
 
         private void SwitchPlayer()
         {

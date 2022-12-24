@@ -15,13 +15,12 @@ namespace GameBI.Model
         public Vector pos;
         public Vector size;
 
-
-        public (int, int) location { get; private set; }
-
-        public Object (string name, (int, int) location)
+        public Object(string name, string texture, Vector pos, Vector size)
         {
             this.name = name;
-            this.location = location;
+            this.texture = texture;
+            this.pos = pos;
+            this.size = size;
         }
 
         public Object()
@@ -30,7 +29,7 @@ namespace GameBI.Model
 
         public void SetLocation (Map map, (int, int) location)
         {
-            this.location = location;
+            //this.location = location;
         }
         
     }

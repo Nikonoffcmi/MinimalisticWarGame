@@ -25,6 +25,7 @@ namespace Engine
     public partial class MainWindow : Window
     {
         public Game gameScene = new Game();
+
         public MainWindow()
         {
             InitializeComponent();
@@ -38,14 +39,14 @@ namespace Engine
             //Создание
             if (TypeBox.SelectedIndex == 0)
             {
-                var g = (int.Parse(X.Text), int.Parse(Y.Text));
                 var ch = new Character(NameBox.Text, int.Parse(HP.Text), int.Parse(Damage.Text),
-                    int.Parse(DistanceMove.Text), int.Parse(DistanceAttack.Text), g);
+                    int.Parse(DistanceMove.Text), int.Parse(DistanceAttack.Text), TextureBox.Text, 
+                    new Vector(int.Parse(X.Text), int.Parse(Y.Text)), new Vector(int.Parse(SX.Text), int.Parse(SY.Text)));
                 gameScene.AddCharacterPlayerOne(ch);
                 gameScene.AddCharacterPlayerTwo(ch);
             }
-            else if (TypeBox.SelectedIndex == 1)
-                gameScene.AddGameBarrier(new GameBarrier(NameBox.Text, (int.Parse(X.Text), int.Parse(Y.Text))));
+            //else if (TypeBox.SelectedIndex == 1)
+                //gameScene.AddGameBarrier(new GameBarrier(NameBox.Text, (int.Parse(X.Text), int.Parse(Y.Text))));
             //objectonScene.Add(new Objects { name = NameBox.Text, texture = TextureBox.Text, type = TypeBox.SelectedIndex, pos = new Vector(int.Parse(X.Text), int.Parse(Y.Text)), size = new Vector(int.Parse(SX.Text), int.Parse(SY.Text)), behaviours = beh, variables = tmpVarList });
             //Обновление списка
             UpdateList();
@@ -67,12 +68,12 @@ namespace Engine
         {
             if (listBox.SelectedIndex != -1)
             {
-                NameBox.Text = gameScene.Characters[listBox.SelectedIndex].name;
-                TextureBox.Text = gameScene.Characters[listBox.SelectedIndex].texture;
-                X.Text = gameScene.Characters[listBox.SelectedIndex].pos.X.ToString();
-                Y.Text = gameScene.Characters[listBox.SelectedIndex].pos.Y.ToString();
-                SX.Text = gameScene.Characters[listBox.SelectedIndex].size.X.ToString();
-                SY.Text = gameScene.Characters[listBox.SelectedIndex].size.Y.ToString();
+                NameBox.Text = gameScene.objects[listBox.SelectedIndex].name;
+                TextureBox.Text = gameScene.objects[listBox.SelectedIndex].texture;
+                X.Text = gameScene.objects[listBox.SelectedIndex].pos.X.ToString();
+                Y.Text = gameScene.objects[listBox.SelectedIndex].pos.Y.ToString();
+                SX.Text = gameScene.objects[listBox.SelectedIndex].size.X.ToString();
+                SY.Text = gameScene.objects[listBox.SelectedIndex].size.Y.ToString();
                 listBox1.Items.Clear();;
             }
         }
@@ -104,7 +105,7 @@ namespace Engine
             //Проверяем существование файла
             if (File.Exists(dialog.FileName))
             {
-                gameScene.Characters.Clear();
+                gameScene.objects.Clear();
                 //СОздаём новый экххемляр XmlSerializer с типом сцены
                 XmlSerializer s = new XmlSerializer(typeof(Scene));
 
@@ -113,11 +114,11 @@ namespace Engine
                 {
                     //Пристваеваем элементы reader которые мы преобразовали в scene - к всем объектам на сцене.
 
-                    gameScene.Characters.Clear();
+                    gameScene.objects.Clear();
                     Scene scene = (Scene)s.Deserialize(reader);
-                    for (int i = 0; i < scene.game.Characters.Count; i++)
+                    for (int i = 0; i < scene.game.objects.Count; i++)
                     {
-                        gameScene.Characters.Add(scene.game.Characters[i]);
+                        gameScene.objects.Add(scene.game.objects[i]);
                     }
                 }
             }
@@ -129,7 +130,7 @@ namespace Engine
         {
             if (listBox.SelectedIndex != -1)
             {
-                gameScene.Characters.RemoveAt(listBox.SelectedIndex);
+                gameScene.objects.RemoveAt(listBox.SelectedIndex);
                 UpdateList();
             }
         }
@@ -142,16 +143,6 @@ namespace Engine
 
 
             }
-        }
-
-        private void AddPoved_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void RemPoved_Click(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GameBI.Model
 {
@@ -14,7 +15,7 @@ namespace GameBI.Model
         public int DamageModified { get; set; }
 
         private int HP;
-        public int damage { get; private set; }
+        private int damage;
 
         private int distanceMove;
         private int distanceAttack;
@@ -25,8 +26,8 @@ namespace GameBI.Model
         {
         }
 
-        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, (int, int) location) 
-            : base(name, location)
+        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, string texture, Vector pos, Vector size)
+             : base(name, texture, pos, size)
         {
             HPModified = hp;
             DamageModified = damage;
@@ -36,19 +37,19 @@ namespace GameBI.Model
             this.distanceAttack = distanceAttack;
         }
 
-        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, 
-            List<IPassiveAbility> passiveAbilities, List<IActiveAbility> activeAbilities, (int, int) location) 
-            : base(name, location)
-        {
-            HPModified = hp;
-            DamageModified = damage;
-            HP = hp;
-            this.damage = damage;
-            this.distanceMove = distanceMove;
-            this.distanceAttack = distanceAttack;
-            //this.passiveAbilities = passiveAbilities;
-            //ActiveAbilities = activeAbilities;
-        }
+        //public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, 
+        //    List<IPassiveAbility> passiveAbilities, List<IActiveAbility> activeAbilities, (int, int) location) 
+        //    : base(name, location)
+        //{
+        //    HPModified = hp;
+        //    DamageModified = damage;
+        //    HP = hp;
+        //    this.damage = damage;
+        //    this.distanceMove = distanceMove;
+        //    this.distanceAttack = distanceAttack;
+        //    //this.passiveAbilities = passiveAbilities;
+        //    //ActiveAbilities = activeAbilities;
+        //}
 
         public void takeDamage(int damage)
         {
@@ -78,7 +79,7 @@ namespace GameBI.Model
                         cMap[y, x] = -1;//индикатор еще не ступали сюда
                 }
 
-            cMap[location.Item2, location.Item1] = 0;//точка отсчета
+            cMap[(int)pos.Y, (int)pos.X] = 0;//точка отсчета
             while (step < distanceMove)
             {
                 for (y = 0; y < map.map.GetLength(1); y++)
@@ -130,50 +131,50 @@ namespace GameBI.Model
             int x = 0, y = 0;
             for (y = 1, x = 0; y <= distanceAttack; y++)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = -1, x = 0; y <= -distanceAttack; y--)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = 0, x = 1; x <= distanceAttack; x++)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = 0, x = -1; x <= -distanceAttack; x--)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = 1, x = 1; y <= distanceAttack; y++, x++)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = -1, x = -1; y <= -distanceAttack; y--, x--)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = -1, x = 1; y <= -distanceAttack; y--, x++)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
 
             for (y = 1, x = -1; y <= distanceAttack; y++, x--)
             {
-                if (map.isCellObject<Character>(location.Item2 + y, location.Item1 + x))
-                    list.Add((location.Item2 + y, location.Item1 + x));
+                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
+                    list.Add(((int)pos.Y + y, (int)pos.X + x));
             }
             return list;
         }

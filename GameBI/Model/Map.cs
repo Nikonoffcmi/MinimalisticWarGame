@@ -11,18 +11,17 @@ namespace GameBI.Model
     {
         public Object[,] map { get; private set; }
 
-        public Map (int y, int x)
+        public Map (int x, int y)
         {
             map = new Object[y, x];
         }
-
         
         public void SetCell(List<Object> gameObjects)
         {
             foreach (var emptyCell in gameObjects)
             {
-                if (emptyCell.location.Item2 < map.GetLength(1) && emptyCell.location.Item1 < map.GetLength(0))
-                    map[emptyCell.location.Item2, emptyCell.location.Item1] = emptyCell;
+                if (emptyCell.pos.Y < map.GetLength(1) && emptyCell.pos.X < map.GetLength(0))
+                    map[(int)emptyCell.pos.Y, (int)emptyCell.pos.X] = emptyCell;
             }
         }
 

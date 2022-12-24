@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameBI", "GameBI\GameBI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine", "Engine\Engine.csproj", "{07CA52FD-9DED-4EA1-92B0-71823EB0F859}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game", "Game\Game.csproj", "{238DEE3B-ECC2-4C18-ACA0-C10E3E9C213C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameUI", "Game\GameUI.csproj", "{238DEE3B-ECC2-4C18-ACA0-C10E3E9C213C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
