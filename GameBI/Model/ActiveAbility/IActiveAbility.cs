@@ -18,7 +18,6 @@ namespace GameBI.Model
         public string Name { get; set; }
         protected int turnNext { get; set; }
         public abstract void ActivateActiveAbility(Map map, Character character);
-        public abstract List<Vector> AbilityDistance(Map map);
         public IActiveAbility()
         {
         }

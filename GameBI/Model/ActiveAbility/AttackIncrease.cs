@@ -31,12 +31,7 @@ namespace GameBI.Model.ActiveAbility
 
         public override void ActivateActiveAbility(Map map, Character character)
         {
-            character.DamageModified = +attackIncrease;
-        }
-
-        public override List<Vector> AbilityDistance(Map map)
-        {
-            return null;
+            character.DamageModified += attackIncrease;
         }
     }
 }

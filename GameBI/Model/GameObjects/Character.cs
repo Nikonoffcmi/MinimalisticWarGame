@@ -44,7 +44,10 @@ namespace GameBI.Model
 
         public void takeDamage(int damage)
         {
-            this.HP -= damage;
+            if (HPModified - damage > HP)
+                HPModified += (HP - HPModified);
+            else
+                HPModified -= damage;
         }
 
         public void ActivateAbility(Map map, Character character, IActiveAbility activeAbility)
@@ -52,7 +55,7 @@ namespace GameBI.Model
             if (!ActiveAbilities.Contains(activeAbility))
                 return;
             ActiveAbilities
-                .Find(aa => aa.GetType() == typeof(IActiveAbility))
+                .Find(aa => ActiveAbilities.Contains(activeAbility))
                 .ActivateActiveAbility(map, character);
         }
 
@@ -124,59 +127,64 @@ namespace GameBI.Model
         {
             List<Vector> list = new List<Vector>();
             int x = 0, y = 0;
-            for (y = 1, x = 0; y <= distanceAttack; y++)
+            for (y = 1, x = 0; y <= distanceAttack && (int)Position.Y + y < map.map.GetLength(0); y++)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = -1, x = 0; y <= -distanceAttack; y--)
+            for (y = -1, x = 0; y <= -distanceAttack && (int)Position.Y + y >= 0; y--)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = 0, x = 1; x <= distanceAttack; x++)
+            for (y = 0, x = 1; x <= distanceAttack && (int)Position.X + x < map.map.GetLength(1); x++)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = 0, x = -1; x <= -distanceAttack; x--)
+            for (y = 0, x = -1; x <= -distanceAttack && (int)Position.X + x >= 0; x--)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = 1, x = 1; y <= distanceAttack; y++, x++)
+            for (y = 1, x = 1; y <= distanceAttack && (int)Position.X + x < map.map.GetLength(1) 
+                && (int)Position.Y + y < map.map.GetLength(0); y++, x++)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = -1, x = -1; y <= -distanceAttack; y--, x--)
+            for (y = -1, x = -1; y <= -distanceAttack && (int)Position.X + x >= 0
+                && (int)Position.Y + y >= 0; y--, x--)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = -1, x = 1; y <= -distanceAttack; y--, x++)
+            for (y = -1, x = 1; y <= -distanceAttack && (int)Position.X + x < map.map.GetLength(1)
+                && (int)Position.Y + y >= 0; y--, x++)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
-            for (y = 1, x = -1; y <= distanceAttack; y++, x--)
+            for (y = 1, x = -1; y <= distanceAttack && (int)Position.X + x >= 0
+                && (int)Position.Y + y < map.map.GetLength(0); y++, x--)
             {
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
-                    list.Add(new Vector(Position.Y + y, Position.X + x));
+                    list.Add(new Vector(Position.X + x, Position.Y + y));
             }
+            list.Add(Position);
             return list;
         }
 
         public bool IsAlive()
         {
-            if (HPModified < 0)
+            if (HPModified <= 0)
                 return false;
             return true;
         }

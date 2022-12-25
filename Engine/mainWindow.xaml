@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid Background="#FF6B6B6B">
-        <Button x:Name="button" Content="Создать объект" HorizontalAlignment="Left" Margin="10,0,0,101" Width="209" Click="button_Click" VerticalAlignment="Bottom"/>
+        <Button x:Name="button" Content="Создать объект" HorizontalAlignment="Left" Margin="10,0,0,76" Width="209" Click="button_Click" VerticalAlignment="Bottom"/>
         <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="10,11,0,0" TextWrapping="Wrap" Text="Name object" VerticalAlignment="Top" Width="209"/>
         <TextBox x:Name="TextureBox" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Texture path" VerticalAlignment="Top" Width="209"/>
         <ComboBox x:Name="TypeBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="209" Margin="10,67,0,0" SelectedIndex="0">
@@ -19,7 +19,7 @@
         <Button x:Name="button_Copy" Content="Изменить объект" HorizontalAlignment="Right" Margin="0,0,140,5" VerticalAlignment="Bottom" Width="145" Click="button_Copy_Click"/>
         <Button x:Name="button_Copy1" Content="Выбрать сцену" HorizontalAlignment="Left" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="209" Click="button_Copy1_Click"/>
         <Button x:Name="button_Copy2" Content="Сериализировать" Margin="224,0,359,5" VerticalAlignment="Bottom" Click="button_Copy2_Click"/>
-        <TextBox x:Name="textBox_Copy1" Height="23" Margin="10,0,359,30" TextWrapping="Wrap" Text="scene.yagir" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="textBox_Copy1" Height="23" Margin="10,0,359,30" TextWrapping="Wrap" Text="scene1.yagir" VerticalAlignment="Bottom"/>
         <Button x:Name="button_Copy3" Content="Удалить" HorizontalAlignment="Right" Margin="0,0,0,5" VerticalAlignment="Bottom" Width="135" Click="button_Copy3_Click"/>
         <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,97,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" Width="209"/>
         <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,125,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" Width="209"/>
@@ -30,5 +30,8 @@
         <TextBox x:Name="DistanceMove" HorizontalAlignment="Left" Height="23" Margin="241,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="Дистанция перемещения"/>
         <ListBox x:Name="listBoxPassiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="White" Margin="0,125,350,231"/>
         <ListBox x:Name="listBoxActiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="White" Margin="0,217,350,139"/>
+        <Button x:Name="plusPassiveAb" Content="+" HorizontalAlignment="Left" Margin="455,154,0,0" VerticalAlignment="Top" Width="23" Click="plusPassiveAb_Click"/>
+        <Button x:Name="plusActiveAb" Content="+" HorizontalAlignment="Left" Margin="457,246,0,0" VerticalAlignment="Top" Width="21" Click="plusActiveAb_Click"/>
+        <Button x:Name="minusAb" Content="-" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" Width="24" Click="minusAb_Click"/>
     </Grid>
 </Window>

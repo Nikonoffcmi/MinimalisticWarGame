@@ -30,12 +30,7 @@ namespace GameBI.Model.ActiveAbility
         {
             if (turnNext == 0)
                 turnNext = turn;
-            character.takeDamage(heal);
-        }
-
-        public override List<Vector> AbilityDistance(Map map)
-        {
-            return null;
+            character.takeDamage(-heal);
         }
     }
 }

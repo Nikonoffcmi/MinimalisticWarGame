@@ -29,7 +29,7 @@ namespace GameBI.Model.PassiveAbility
         {
             if (turnNext == 0)
                 turnNext = turn;
-            character.takeDamage(heal);
+            character.takeDamage(-heal);
         }
     }
 }

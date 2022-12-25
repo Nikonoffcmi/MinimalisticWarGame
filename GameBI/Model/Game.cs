@@ -33,7 +33,8 @@ namespace GameBI.Model
             currPlayer = new List<Character>();
             map = new Map(10, 10);
             objects = new List<Object>();
-            DefaultAbility();
+            activeAbilities = new List<IActiveAbility>();
+            passiveAbilities = new List<IPassiveAbility>();
         }
 
         public void AddCharacterPlayerOne(Character character)
@@ -52,14 +53,13 @@ namespace GameBI.Model
 
         public void AddGameBarrier(GameBarrier gameBarrier)
         {
-            var barriers = new List<GameBarrier>() { gameBarrier};
-            map.SetCell(barriers.ToList<Object>());
             objects.Add(gameBarrier);
         }
 
         public List<Vector> StartGame()
         {
             currPlayer = charactersPlayerOne;
+            map.SetCell(objects.Where(b => b.GetType() == typeof(GameBarrier)).ToList());
             map.SetCell(charactersPlayerOne.ToList<Object>());
             map.SetCell(charactersPlayerTwo.ToList<Object>());
 
@@ -68,11 +68,13 @@ namespace GameBI.Model
             return currPlayer.Select(ch => ch.Position).ToList();
         }
 
-        public List<Vector> OnCharacterPress(Vector location)
+        public List<Vector> OnCharacterPressMove(Vector location)
         {
             if (currCharater == null)
             {
                 currCharater = currPlayer.ToList().Find(ch => ch.Position == location);
+                if (currCharater == null)
+                    return currPlayer.Select(ch => ch.Position).ToList();
                 var result = currCharater.AvailableMovements(map);
                 result.AddRange(currCharater.AvailableAttacks(map));
                 return result;
@@ -87,10 +89,17 @@ namespace GameBI.Model
                     if (currActiveAbility != null)
                         currCharater.ActivateAbility(map, selCh, currActiveAbility);
                     else
-                        selCh.takeDamage(currCharater.damage);
+                        selCh.takeDamage(currCharater.DamageModified);
                 }
-                else if (!map.isCellObject<Barrier>((int)location.Y, (int)location.X))
+                else if (!map.isCellObject<GameBarrier>((int)location.Y, (int)location.X) 
+                    && currCharater.AvailableMovements(map).Contains(location))
                     currCharater.Move(map, location);
+                else
+                {
+                    var result = currCharater.AvailableMovements(map);
+                    result.AddRange(currCharater.AvailableAttacks(map));
+                    return result;
+                }
                 currCharater = null;
                 currActiveAbility = null;
                 SwitchPlayer();
@@ -98,15 +107,17 @@ namespace GameBI.Model
             }
         }
 
-        public List<IActiveAbility> CharacterAbilities(Vector position)
+        public List<string> CharacterAbilities(Vector position)
         {
-            return currPlayer.ToList().Find(ch => ch.Position == position).ActiveAbilities;
+            return currPlayer.ToList().Find(ch => ch.Position == position).ActiveAbilities.Select(aa => aa.Name).ToList();
         }
 
-        public List<Vector> ActiveAbilitiesDistans(IActiveAbility activeAbility)
+        public List<Vector> ActiveAbilitiesDistans(string activeAbility)
         {
-            currActiveAbility = activeAbility;
-            return currCharater.ActiveAbilities.Find(aa => aa.GetType() == activeAbility.GetType()).AbilityDistance(map);
+            if (currCharater == null)
+                return currPlayer.Select(ch => ch.Position).ToList();
+            currActiveAbility = currCharater.ActiveAbilities.Find(aa => aa.Name.Equals(activeAbility));
+            return currCharater.AvailableAttacks(map);
         }
 
         public List<Vector> CancelingSelectedCharacter()
@@ -124,12 +135,23 @@ namespace GameBI.Model
 
         private void SwitchPlayer()
         {
+            var liveCharater = 0;
+            for (int i = 0; i < currPlayer.Count(); i++)
+            {
+                if (currPlayer[i].IsAlive())
+                    liveCharater++;
+                else
+                    currPlayer.Remove(currPlayer[i]);
+            }
+            if (liveCharater == 0)
+                isGameEnd = true;
+
             if (currPlayer == charactersPlayerOne)
                 currPlayer = charactersPlayerTwo;
             else
                 currPlayer = charactersPlayerOne;
 
-            var liveCharater = 0; 
+            liveCharater = 0;
             for (int i = 0; i < currPlayer.Count(); i++)
             {
                 if (currPlayer[i].IsAlive())
@@ -138,22 +160,10 @@ namespace GameBI.Model
                     currPlayer[i].NewTurn(currPlayer[i]);
                 }
                 else
-                    currPlayer[i] = null;
+                    currPlayer.Remove(currPlayer[i]);
             }
             if (liveCharater == 0)
                 isGameEnd = true;
-        }
-
-        private void DefaultAbility()
-        {
-            activeAbilities = new List<IActiveAbility>();
-            passiveAbilities = new List<IPassiveAbility>();
-
-            activeAbilities.Add(new Heal("лечение", 1, 2));
-            activeAbilities.Add(new AttackIncrease("увеличение атаки", 3, 2));
-
-            passiveAbilities.Add(new PassiveHeal("пассивное лечение", 1, 2));
-            passiveAbilities.Add(new PassiveAttackIncrease("пассивное увеличение атаки", 3, 2));
         }
     }
 }
