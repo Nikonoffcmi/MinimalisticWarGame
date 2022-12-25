@@ -1,17 +1,28 @@
-﻿using System;
+﻿using GameBI.Model.ActiveAbility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Linq;
+using System.Xml.Serialization;
 
 namespace GameBI.Model
 {
-    public interface IActiveAbility
+    [XmlInclude(typeof(AttackIncrease))]
+    [XmlInclude(typeof(Heal))]
+    [Serializable]
+    public abstract class IActiveAbility
     {
-        string Name { get; }
-        int turnNext { get; set; }
-        void ActivateActiveAbility(Map map, Character character);
-        List<(int, int)> AbilityDistance(Map map);
+        public string Name { get; set; }
+        protected int turnNext { get; set; }
+        public abstract void ActivateActiveAbility(Map map, Character character);
+        public abstract List<Vector> AbilityDistance(Map map);
+        public IActiveAbility()
+        {
+        }
+
+
     }
 }

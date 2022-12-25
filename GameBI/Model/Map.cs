@@ -9,19 +9,26 @@ namespace GameBI.Model
     
     public class Map
     {
-        public Object[,] map { get; private set; }
+        public Object[,] map { get; set; }
 
         public Map (int x, int y)
         {
             map = new Object[y, x];
+            for (int i = 0; i < map.GetLength(0); i++)
+                for (int j = 0; j < map.GetLength(1); j++)
+                    map[i, j] = new Object();
+        }
+
+        public Map()
+        {
         }
         
         public void SetCell(List<Object> gameObjects)
         {
             foreach (var emptyCell in gameObjects)
             {
-                if (emptyCell.pos.Y < map.GetLength(1) && emptyCell.pos.X < map.GetLength(0))
-                    map[(int)emptyCell.pos.Y, (int)emptyCell.pos.X] = emptyCell;
+                if (emptyCell.Position.Y < map.GetLength(1) && emptyCell.Position.X < map.GetLength(0))
+                    map[(int)emptyCell.Position.Y, (int)emptyCell.Position.X] = emptyCell;
             }
         }
 

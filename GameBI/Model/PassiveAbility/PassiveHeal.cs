@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model.PassiveAbility
 {
+    [Serializable]
     public class PassiveHeal
         : IPassiveAbility
     {
-        public string Name { get; }
-        public int turnNext { get; set; }
-        private int turn;
-        private int heal;
+        public int turn { get; set; }
+        public int heal { get; set; }
 
         public PassiveHeal(string name, int turn, int heal)
         {
@@ -22,7 +21,11 @@ namespace GameBI.Model.PassiveAbility
             this.heal = heal;
         }
 
-        public void ActivatePassiveAbility(Character character)
+        public PassiveHeal()
+        {
+        }
+
+        public override void ActivatePassiveAbility(Character character)
         {
             if (turnNext == 0)
                 turnNext = turn;

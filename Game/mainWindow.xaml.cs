@@ -27,11 +27,14 @@ namespace GameUI
         public Game gameScene = new Game();
 
         public string pathtoscene = @"C:\Users\Марина\OneDrive\Документы\депрессия\2 год\3 семестр\Программирование\лаба 7\MinimalisticWarGame\Engine\bin\Debug\scene.yagir";
+        public Button prevButton;
 
+        public Button[,] buttons;
         public MainWindow()
         {
             InitializeComponent();
             LoadScene();
+
 
             Grid myGrid = new Grid();
             myGrid.Width = 450;
@@ -40,6 +43,7 @@ namespace GameUI
             myGrid.VerticalAlignment = VerticalAlignment.Top;
             myGrid.ShowGridLines = true;
 
+            buttons = new Button[((int)gameScene.mapSize.Y), ((int)gameScene.mapSize.X)];
 
             for (int i = 0; i < gameScene.mapSize.Y; i++)
                 myGrid.ColumnDefinitions.Add(new ColumnDefinition());
@@ -47,22 +51,26 @@ namespace GameUI
             for (int i = 0; i < gameScene.mapSize.X; i++)
                 myGrid.RowDefinitions.Add(new RowDefinition());
 
-            for (int i = 0; i < gameScene.objects.Count; i++)
-            {
-                Image img = new Image();
-                img.Source = new BitmapImage(new Uri(gameScene.objects[i].texture));
-
-                var button = new Button
+            for (int i = 0; i < gameScene.mapSize.Y; i++)
+                for (int j = 0; j < gameScene.mapSize.X; j++)
                 {
-                    Content = img,
-                };
-                Grid.SetColumn(button, (int)gameScene.objects[i].pos.X-1);
-                Grid.SetRow(button, (int)gameScene.objects[i].pos.Y-1);
+                    var button1 = new Button
+                    {
+                        Background = Brushes.White,
+                    };
+                    Grid.SetColumn(button1, i);
+                    Grid.SetRow(button1, j);
+                    button1.Click += new RoutedEventHandler(ButtonClick);
+                    buttons[i,j] = button1;
 
-                myGrid.Children.Add(button);
-            }
+                    myGrid.Children.Add(button1);
+                }
+
+            UpdateMap();
+
 
             Content = myGrid;
+            gameScene.StartGame();
         }
 
         public void LoadScene()
@@ -79,14 +87,60 @@ namespace GameUI
                     //Присваиваем элементы reader которые мы преобразовали в scene - к всем объектам на сцене.
                     gameScene.objects.Clear();
                     Scene scene = (Scene)s.Deserialize(reader);
-                    for (int i = 0; i < scene.game.objects.Count; i++)
-                    {
-                        gameScene.objects.Add(scene.game.objects[i]);
-                    }
+                    gameScene = scene.game;
+                    //for (int i = 0; i < scene.game.objects.Count; i++)
+                    //{
+                    //    gameScene.objects.Add(scene.game.objects[i]);
+                    //}
                 }
             }
         }
 
+        public void ButtonClick(object sender, EventArgs e)
+        {
+            if (prevButton != null)
+                prevButton.Background = Brushes.White;
+            Button pressedButton = sender as Button;
+            prevButton = pressedButton;
+            
+            var buttonLocation = pressedButton.PointToScreen(new Point(0, 0));
+            var buttonPosition = new Vector((int)((buttonLocation.X - Left) / pressedButton.ActualWidth),
+                (int)((buttonLocation.Y - Top) / pressedButton.ActualHeight));
+            var btn = gameScene.OnCharacterPress(buttonPosition);
+            UpdateMap();
+            foreach (var b in btn)
+            {
+                buttons[((int)b.X), ((int)b.Y)].Background = Brushes.Yellow;
+            }
+        }
+
+        public void UpdateMap()
+        {
+            for (int i = 0; i < gameScene.mapSize.Y; i++)
+                for (int j = 0; j < gameScene.mapSize.X; j++)
+                {
+                    buttons[j, i].Background = Brushes.White;
+                    buttons[j, i].Content = null;
+                }
+
+            for (int i = 0; i < gameScene.charactersPlayerOne.Count; i++)
+            {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(gameScene.charactersPlayerOne[i].Texture));
+
+                buttons[(int)gameScene.charactersPlayerOne[i].Position.X,
+                    (int)gameScene.charactersPlayerOne[i].Position.Y].Content = img;
+            }
+
+            for (int i = 0; i < gameScene.charactersPlayerTwo.Count; i++)
+            {
+                Image img = new Image();
+                img.Source = new BitmapImage(new Uri(gameScene.charactersPlayerTwo[i].Texture));
+
+                buttons[(int)gameScene.charactersPlayerTwo[i].Position.X,
+                     (int)gameScene.charactersPlayerTwo[i].Position.Y].Content = img;
+            }
+        }
         public class Scene
         {
             public Game game;

@@ -5,29 +5,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Xml.Serialization;
 
 namespace GameBI.Model
 {
+    [Serializable]
     public class Character
         : Object
     {
         public int HPModified { get; set; }
         public int DamageModified { get; set; }
 
-        private int HP;
-        private int damage;
+        public int HP { get; set; }
+        public int damage { get; set; }
 
-        private int distanceMove;
-        private int distanceAttack;
-        //private List<IPassiveAbility> passiveAbilities;
-        //public List<IActiveAbility> ActiveAbilities { get; set; }
+        public int distanceMove { get; set; }
+        public int distanceAttack { get; set; }
+        public List<IPassiveAbility> passiveAbilities { get; set; }
+        public List<IActiveAbility> ActiveAbilities { get; set; }
 
         public Character()
         {
         }
 
-        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, string texture, Vector pos, Vector size)
-             : base(name, texture, pos, size)
+        public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, 
+            string texture, Vector pos, List<IActiveAbility> activeAbilities, List<IPassiveAbility> passiveAbilities)
+             : base(name, texture, pos)
         {
             HPModified = hp;
             DamageModified = damage;
@@ -35,21 +38,9 @@ namespace GameBI.Model
             this.damage = damage;
             this.distanceMove = distanceMove;
             this.distanceAttack = distanceAttack;
+            ActiveAbilities = activeAbilities;
+            this.passiveAbilities = passiveAbilities;
         }
-
-        //public Character(string name, int hp, int damage, int distanceMove, int distanceAttack, 
-        //    List<IPassiveAbility> passiveAbilities, List<IActiveAbility> activeAbilities, (int, int) location) 
-        //    : base(name, location)
-        //{
-        //    HPModified = hp;
-        //    DamageModified = damage;
-        //    HP = hp;
-        //    this.damage = damage;
-        //    this.distanceMove = distanceMove;
-        //    this.distanceAttack = distanceAttack;
-        //    //this.passiveAbilities = passiveAbilities;
-        //    //ActiveAbilities = activeAbilities;
-        //}
 
         public void takeDamage(int damage)
         {
@@ -58,18 +49,18 @@ namespace GameBI.Model
 
         public void ActivateAbility(Map map, Character character, IActiveAbility activeAbility)
         {
-            /*if (!ActiveAbilities.Contains(activeAbility))
+            if (!ActiveAbilities.Contains(activeAbility))
                 return;
             ActiveAbilities
                 .Find(aa => aa.GetType() == typeof(IActiveAbility))
-                .ActivateActiveAbility(map, character);*/
+                .ActivateActiveAbility(map, character);
         }
 
-        public List<(int, int)> AvailableMovements(Map map)
+        public List<Vector> AvailableMovements(Map map)
         {
-            int[,] cMap = new int[map.map.GetLength(0), map.map.GetLength(1)];
+            int[,] cMap = new int[map.map.GetLength(1), map.map.GetLength(0)];
             int x, y, step = 0;
-            List<(int, int)> list = new List<(int, int)>();
+            List<Vector> list = new List<Vector>();
             for (y = 0; y < map.map.GetLength(0); y++)
                 for (x = 0; x < map.map.GetLength(1); x++)
                 {
@@ -79,7 +70,7 @@ namespace GameBI.Model
                         cMap[y, x] = -1;//индикатор еще не ступали сюда
                 }
 
-            cMap[(int)pos.Y, (int)pos.X] = 0;//точка отсчета
+            cMap[(int)Position.Y, (int)Position.X] = 0;//точка отсчета
             while (step < distanceMove)
             {
                 for (y = 0; y < map.map.GetLength(1); y++)
@@ -92,25 +83,25 @@ namespace GameBI.Model
                             if (y - 1 >= 0 && cMap[x, y - 1] != -2 && cMap[x, y - 1] == -1)
                             {
                                 cMap[x, y - 1] = step + 1;
-                                list.Add((y, x));
+                                list.Add(new Vector(y - 1, x));
                             }
 
                             if (x - 1 >= 0 && cMap[x - 1, y] != -2 && cMap[x - 1, y] == -1)
                             {
                                 cMap[x - 1, y] = step + 1;
-                                list.Add((y, x - 1));
+                                list.Add(new Vector(y, x - 1));
                             }
 
                             if (y + 1 < map.map.GetLength(1) && cMap[x, y + 1] != -2 && cMap[x, y + 1] == -1)
                             {
                                 cMap[x, y + 1] = step + 1;
-                                list.Add((y + 1, x));
+                                list.Add(new Vector(y + 1, x));
                             }
 
                             if (x + 1 < map.map.GetLength(0) && cMap[x + 1, y] != -2 && cMap[x + 1, y] == -1)
                             {
                                 cMap[x + 1, y] = step + 1;
-                                list.Add((y, x + 1));
+                                list.Add(new Vector(y, x + 1));
                             }
                         }
                     }
@@ -119,62 +110,66 @@ namespace GameBI.Model
             return list;
         }
 
-        public void Move(Map map, (int, int) toLocation)
+        public void Move(Map map, Vector toPosition)
         {
-            if (AvailableMovements(map).Contains(toLocation))
-                SetLocation(map, toLocation);
+            if (AvailableMovements(map).Contains(toPosition))
+            {
+                map.SetCell(new List<Object>() { new Object(Name, Texture, Position) });
+                Position = toPosition;
+                map.SetCell(new List<Object>() { this });
+            }
         }
 
-        public List<(int, int)> AvailableAttacks(Map map)
+        public List<Vector> AvailableAttacks(Map map)
         {
-            List<(int, int)> list = new List<(int, int)>();
+            List<Vector> list = new List<Vector>();
             int x = 0, y = 0;
             for (y = 1, x = 0; y <= distanceAttack; y++)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = -1, x = 0; y <= -distanceAttack; y--)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = 0, x = 1; x <= distanceAttack; x++)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = 0, x = -1; x <= -distanceAttack; x--)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = 1, x = 1; y <= distanceAttack; y++, x++)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = -1, x = -1; y <= -distanceAttack; y--, x--)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = -1, x = 1; y <= -distanceAttack; y--, x++)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
 
             for (y = 1, x = -1; y <= distanceAttack; y++, x--)
             {
-                if (map.isCellObject<Character>((int)pos.Y + y, (int)pos.X + x))
-                    list.Add(((int)pos.Y + y, (int)pos.X + x));
+                if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
+                    list.Add(new Vector(Position.Y + y, Position.X + x));
             }
             return list;
         }
@@ -186,9 +181,9 @@ namespace GameBI.Model
             return true;
         }
 
-        public void NewTurn()
+        public void NewTurn(Character character)
         {
-            //passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(null));
+            passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(character));
         }
     }
 }

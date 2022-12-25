@@ -1,4 +1,5 @@
 ﻿using GameBI.Model;
+using GameBI.Model.ActiveAbility;
 using GameBI.Model.GameObjects;
 using Microsoft.Win32;
 using System;
@@ -24,11 +25,18 @@ namespace Engine
 {
     public partial class MainWindow : Window
     {
-        public Game gameScene = new Game();
+        public Game gameScene;
 
         public MainWindow()
         {
             InitializeComponent();
+            gameScene = new Game();
+
+            foreach (var AA in gameScene.activeAbilities.Select(a => a.Name))
+                listBoxActiveAbility.Items.Add(AA);
+
+            foreach (var PA in gameScene.passiveAbilities.Select(a => a.Name))
+                listBoxPassiveAbility.Items.Add(PA);
         }
 
         /// <summary>
@@ -39,15 +47,31 @@ namespace Engine
             //Создание
             if (TypeBox.SelectedIndex == 0)
             {
+                string AA = "";
+                if (listBoxActiveAbility.SelectedIndex != -1)
+                    AA = listBoxActiveAbility.SelectedItem.ToString();
+
+                string PA = "";
+                if (listBoxPassiveAbility.SelectedIndex != -1)
+                    PA = listBoxPassiveAbility.SelectedItem.ToString();
+
                 var ch = new Character(NameBox.Text, int.Parse(HP.Text), int.Parse(Damage.Text),
                     int.Parse(DistanceMove.Text), int.Parse(DistanceAttack.Text), TextureBox.Text, 
-                    new Vector(int.Parse(X.Text), int.Parse(Y.Text)), new Vector(int.Parse(SX.Text), int.Parse(SY.Text)));
+                    new Vector(int.Parse(X.Text), int.Parse(Y.Text)), gameScene.activeAbilities.Where(aa => aa.Name.Equals(AA)).ToList(),
+                    gameScene.passiveAbilities.Where(pa => pa.Name.Equals(PA)).ToList());
                 gameScene.AddCharacterPlayerOne(ch);
-                gameScene.AddCharacterPlayerTwo(ch);
+
+                var ch2 = new Character(NameBox.Text, int.Parse(HP.Text), int.Parse(Damage.Text),
+                    int.Parse(DistanceMove.Text), int.Parse(DistanceAttack.Text), TextureBox.Text,
+                    new Vector(int.Parse(X.Text), int.Parse(Y.Text)), gameScene.activeAbilities.Where(aa => aa.Name.Equals(AA)).ToList(),
+                    gameScene.passiveAbilities.Where(pa => pa.Name.Equals(PA)).ToList());
+
+                gameScene.AddCharacterPlayerTwo(ch2);
             }
-            //else if (TypeBox.SelectedIndex == 1)
-                //gameScene.AddGameBarrier(new GameBarrier(NameBox.Text, (int.Parse(X.Text), int.Parse(Y.Text))));
-            //objectonScene.Add(new Objects { name = NameBox.Text, texture = TextureBox.Text, type = TypeBox.SelectedIndex, pos = new Vector(int.Parse(X.Text), int.Parse(Y.Text)), size = new Vector(int.Parse(SX.Text), int.Parse(SY.Text)), behaviours = beh, variables = tmpVarList });
+            else if (TypeBox.SelectedIndex == 1)
+                gameScene.AddGameBarrier(new GameBarrier(NameBox.Text, TextureBox.Text,
+                    new Vector(int.Parse(X.Text), int.Parse(Y.Text))));
+            
             //Обновление списка
             UpdateList();
         }
@@ -60,7 +84,7 @@ namespace Engine
             listBox.Items.Clear();
             for (int i = 0; i < gameScene.objects.Count; i++)
             {
-                listBox.Items.Add(gameScene.objects[i].name);
+                listBox.Items.Add(gameScene.objects[i].Name);
             }
         }
 
@@ -68,12 +92,10 @@ namespace Engine
         {
             if (listBox.SelectedIndex != -1)
             {
-                NameBox.Text = gameScene.objects[listBox.SelectedIndex].name;
-                TextureBox.Text = gameScene.objects[listBox.SelectedIndex].texture;
-                X.Text = gameScene.objects[listBox.SelectedIndex].pos.X.ToString();
-                Y.Text = gameScene.objects[listBox.SelectedIndex].pos.Y.ToString();
-                SX.Text = gameScene.objects[listBox.SelectedIndex].size.X.ToString();
-                SY.Text = gameScene.objects[listBox.SelectedIndex].size.Y.ToString();
+                NameBox.Text = gameScene.objects[listBox.SelectedIndex].Name;
+                TextureBox.Text = gameScene.objects[listBox.SelectedIndex].Texture;
+                X.Text = gameScene.objects[listBox.SelectedIndex].Position.X.ToString();
+                Y.Text = gameScene.objects[listBox.SelectedIndex].Position.Y.ToString();
                 listBox1.Items.Clear();;
             }
         }
@@ -83,7 +105,7 @@ namespace Engine
         private void button_Copy2_Click(object sender, RoutedEventArgs e)
         {
             //СОздаём новый экххемляр XmlSerializer с типом сцены
-            XmlSerializer s = new XmlSerializer(typeof(Scene));
+            XmlSerializer s = new XmlSerializer(typeof(Scene), new Type[] { typeof(Scene) });
             //Создаём поток с нашим полным путём. 
             TextWriter myWriter = new StreamWriter(System.IO.Path.GetFullPath(textBox_Copy1.Text)); ///Path.GetFullPath - Посзволяет начать путь с пути .exe файла
             Scene scene = new Scene(); // - Создаём новую сцену. 
@@ -135,6 +157,7 @@ namespace Engine
             }
         }
 
+        [Serializable]
         public class Scene
         {
             public Game game;

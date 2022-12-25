@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace GameBI.Model.PassiveAbility
 {
+    [Serializable]
     public class PassiveAttackIncrease
         : IPassiveAbility
     {
-        public string Name { get; }
-        public int turnNext { get; set; }
-        private int turn;
-        private int attackIncrease;
+        public int turn { get; set; }
+        public int attackIncrease { get; set; }
 
         public PassiveAttackIncrease(string name, int turn, int attackIncrease)
         {
@@ -22,7 +21,11 @@ namespace GameBI.Model.PassiveAbility
             this.attackIncrease = attackIncrease;
         }
 
-        public void ActivatePassiveAbility(Character character)
+        public PassiveAttackIncrease()
+        {
+        }
+
+        public override void ActivatePassiveAbility(Character character)
         {
             character.DamageModified = +attackIncrease;
         }

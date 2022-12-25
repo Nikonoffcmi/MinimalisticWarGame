@@ -7,11 +7,12 @@ using System.Windows;
 
 namespace GameBI.Model.GameObjects
 {
+    [Serializable]
     public class GameBarrier
         :Object
     {
-        public GameBarrier(string name, string texture, Vector pos, Vector size)
-            : base(name, texture, pos, size)
+        public GameBarrier(string name, string texture, Vector pos)
+            : base(name, texture, pos)
         {
         }
 
