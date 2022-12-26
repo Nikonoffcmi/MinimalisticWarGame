@@ -36,7 +36,7 @@ namespace Engine
             gameScene.activeAbilities.Add(new Heal("лечение", 1, 2));
             gameScene.activeAbilities.Add(new AttackIncrease("увеличение атаки", 3, 2));
 
-            gameScene.passiveAbilities.Add(new PassiveHeal("пассивное лечение", 1, 2));
+            gameScene.passiveAbilities.Add(new PassiveHeal("пассивное лечение", 1, 1));
             gameScene.passiveAbilities.Add(new PassiveAttackIncrease("пассивное увеличение атаки", 3, 2));
 
             foreach (var AA in gameScene.activeAbilities.Select(a => a.Name))

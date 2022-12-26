@@ -82,6 +82,7 @@ namespace GameUI
             }
 
             Main.Children.Add(myGrid);
+            Serializer();
         }
 
         public void LoadScene()

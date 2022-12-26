@@ -11,7 +11,6 @@ namespace GameBI.Model.ActiveAbility
     public class Heal
         : IActiveAbility
     {
-        public int turn { get; set; }
         public int heal { get; set; }
 
         public Heal(string name, int turn, int heal)
@@ -29,8 +28,10 @@ namespace GameBI.Model.ActiveAbility
         public override void ActivateActiveAbility(Map map, Character character)
         {
             if (turnNext == 0)
+            {
                 turnNext = turn;
-            character.takeDamage(-heal);
+                character.takeDamage(-heal);
+            }
         }
     }
 }

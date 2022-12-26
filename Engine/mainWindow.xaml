@@ -7,31 +7,42 @@
         xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="Engine.MainWindow"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid Background="#FF6B6B6B">
-        <Button x:Name="button" Content="Создать объект" HorizontalAlignment="Left" Margin="10,0,0,76" Width="209" Click="button_Click" VerticalAlignment="Bottom"/>
-        <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="23" Margin="10,11,0,0" TextWrapping="Wrap" Text="Name object" VerticalAlignment="Top" Width="209"/>
-        <TextBox x:Name="TextureBox" HorizontalAlignment="Left" Height="23" Margin="10,39,0,0" TextWrapping="Wrap" Text="Texture path" VerticalAlignment="Top" Width="209"/>
-        <ComboBox x:Name="TypeBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="209" Margin="10,67,0,0" SelectedIndex="0">
+    <Grid Background="#FFDCD8D8">
+        <Button x:Name="button" Content="Создать объект" HorizontalAlignment="Left" Margin="10,0,0,58" Width="209" Click="button_Click" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="NameBox" HorizontalAlignment="Left" Height="22" Margin="10,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <TextBox x:Name="TextureBox" HorizontalAlignment="Left" Height="24" Margin="10,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <ComboBox x:Name="TypeBox" HorizontalAlignment="Left" VerticalAlignment="Top" Width="209" Margin="10,109,0,0" SelectedIndex="0">
             <System:String>Персонаж</System:String>
             <System:String>Препятствие</System:String>
         </ComboBox>
-        <ListBox x:Name="listBox" HorizontalAlignment="Right" Width="285" Background="{x:Null}" Foreground="White" Margin="0,0,0,28"/>
+        <ListBox x:Name="listBox" HorizontalAlignment="Right" Width="285" Background="{x:Null}" Foreground="Black" Margin="0,0,0,28"/>
         <Button x:Name="button_Copy" Content="Изменить объект" HorizontalAlignment="Right" Margin="0,0,140,5" VerticalAlignment="Bottom" Width="145" Click="button_Copy_Click"/>
         <Button x:Name="button_Copy1" Content="Выбрать сцену" HorizontalAlignment="Left" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="209" Click="button_Copy1_Click"/>
         <Button x:Name="button_Copy2" Content="Сериализировать" Margin="224,0,359,5" VerticalAlignment="Bottom" Click="button_Copy2_Click"/>
         <TextBox x:Name="textBox_Copy1" Height="23" Margin="10,0,359,30" TextWrapping="Wrap" Text="scene1.yagir" VerticalAlignment="Bottom"/>
         <Button x:Name="button_Copy3" Content="Удалить" HorizontalAlignment="Right" Margin="0,0,0,5" VerticalAlignment="Bottom" Width="135" Click="button_Copy3_Click"/>
-        <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,97,0,0" TextWrapping="Wrap" Text="X" VerticalAlignment="Top" Width="209"/>
-        <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,125,0,0" TextWrapping="Wrap" Text="Y" VerticalAlignment="Top" Width="209"/>
-        <ListBox x:Name="listBox1" HorizontalAlignment="Left" Margin="10,209,0,154" Width="209"/>
-        <TextBox x:Name="HP" HorizontalAlignment="Left" Height="23" Margin="241,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="HP"/>
-        <TextBox x:Name="Damage" HorizontalAlignment="Left" Height="23" Margin="241,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="Урон"/>
-        <TextBox x:Name="DistanceAttack" HorizontalAlignment="Left" Height="23" Margin="241,67,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="Дистанция Атаки"/>
-        <TextBox x:Name="DistanceMove" HorizontalAlignment="Left" Height="23" Margin="241,97,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209" Text="Дистанция перемещения"/>
-        <ListBox x:Name="listBoxPassiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="White" Margin="0,125,350,231"/>
-        <ListBox x:Name="listBoxActiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="White" Margin="0,217,350,139"/>
-        <Button x:Name="plusPassiveAb" Content="+" HorizontalAlignment="Left" Margin="455,154,0,0" VerticalAlignment="Top" Width="23" Click="plusPassiveAb_Click"/>
-        <Button x:Name="plusActiveAb" Content="+" HorizontalAlignment="Left" Margin="457,246,0,0" VerticalAlignment="Top" Width="21" Click="plusActiveAb_Click"/>
-        <Button x:Name="minusAb" Content="-" HorizontalAlignment="Left" Margin="10,275,0,0" VerticalAlignment="Top" Width="24" Click="minusAb_Click"/>
+        <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,164,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <ListBox x:Name="listBox1" HorizontalAlignment="Left" Margin="10,246,0,117" Width="209"/>
+        <TextBox x:Name="HP" HorizontalAlignment="Left" Height="23" Margin="241,28,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <TextBox x:Name="Damage" HorizontalAlignment="Left" Height="23" Margin="241,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <TextBox x:Name="DistanceAttack" HorizontalAlignment="Left" Height="23" Margin="241,120,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <TextBox x:Name="DistanceMove" HorizontalAlignment="Left" Height="23" Margin="241,163,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
+        <ListBox x:Name="listBoxPassiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="Black" Margin="0,201,350,151"/>
+        <ListBox x:Name="listBoxActiveAbility" HorizontalAlignment="Right" Width="209" Background="{x:Null}" Foreground="Black" Margin="0,283,354,68"/>
+        <Button x:Name="plusPassiveAb" Content="+" HorizontalAlignment="Left" Margin="451,220,0,0" VerticalAlignment="Top" Width="23" Click="plusPassiveAb_Click"/>
+        <Button x:Name="plusActiveAb" Content="+" HorizontalAlignment="Left" Margin="453,312,0,0" VerticalAlignment="Top" Width="21" Click="plusActiveAb_Click"/>
+        <Button x:Name="minusAb" Content="-" HorizontalAlignment="Left" Margin="10,312,0,0" VerticalAlignment="Top" Width="24" Click="minusAb_Click"/>
+        <Label Content="Имя обьекта" HorizontalAlignment="Left" Margin="10,4,0,0" VerticalAlignment="Top"/>
+        <Label Content="Путь до текстуры" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top"/>
+        <Label Content="X" HorizontalAlignment="Left" Margin="10,136,0,0" VerticalAlignment="Top"/>
+        <Label Content="Y" HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top"/>
+        <Label Content="Спосрбности" HorizontalAlignment="Left" Margin="10,220,0,0" VerticalAlignment="Top"/>
+        <Label Content="Здоровье" HorizontalAlignment="Left" Margin="241,2,0,0" VerticalAlignment="Top"/>
+        <Label Content="Урон" HorizontalAlignment="Left" Margin="241,51,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дистанция Атаки" HorizontalAlignment="Left" Margin="241,98,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дистанция перемещения" HorizontalAlignment="Left" Margin="241,137,0,0" VerticalAlignment="Top"/>
+        <Label Content="Активные способности" HorizontalAlignment="Left" Margin="237,256,0,0" VerticalAlignment="Top"/>
+        <Label Content="Пассивные способности" HorizontalAlignment="Left" Margin="241,180,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

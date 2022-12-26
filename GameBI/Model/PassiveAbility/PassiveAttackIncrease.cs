@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GameBI.Model.ActiveAbility;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,7 +28,13 @@ namespace GameBI.Model.PassiveAbility
 
         public override void ActivatePassiveAbility(Character character)
         {
-            character.DamageModified = +attackIncrease;
+            turnNext--;
+            if (turnNext <= 0)
+            {
+                turnNext = turn;
+                if (character.damage * 3 > character.DamageModified + attackIncrease)
+                    character.DamageModified += attackIncrease;
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ namespace GameBI.Model.PassiveAbility
         public PassiveHeal(string name, int turn, int heal)
         {
             this.Name = name;
-            this.turnNext = 0;
+            this.turnNext = turn;
             this.turn = turn;
             this.heal = heal;
         }
@@ -27,9 +27,12 @@ namespace GameBI.Model.PassiveAbility
 
         public override void ActivatePassiveAbility(Character character)
         {
+            turnNext--;
             if (turnNext == 0)
+            {
                 turnNext = turn;
-            character.takeDamage(-heal);
+                character.takeDamage(-heal);
+            }
         }
     }
 }

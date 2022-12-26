@@ -14,7 +14,6 @@ namespace GameBI.Model.ActiveAbility
     public class AttackIncrease
         : IActiveAbility
     {
-        public int turn { get; set; }
         public int attackIncrease { get; set; }
 
         public AttackIncrease(string name, int turn, int attackIncrease)
@@ -31,7 +30,11 @@ namespace GameBI.Model.ActiveAbility
 
         public override void ActivateActiveAbility(Map map, Character character)
         {
-            character.DamageModified += attackIncrease;
+            if (turnNext == 0)
+            {
+                turnNext = turn;
+                character.DamageModified += attackIncrease;
+            }
         }
     }
 }

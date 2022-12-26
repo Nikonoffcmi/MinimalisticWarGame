@@ -207,6 +207,12 @@ namespace GameBI.Model
 
         public void NewTurn(Character character)
         {
+            ActiveAbilities.ForEach(aa => aa.turnNext--);
+            foreach (var aa in ActiveAbilities)
+            {
+                if (aa.turnNext <= 0)
+                    aa.turnNext = 0;
+            }
             passiveAbilities.ForEach(pa => pa.ActivatePassiveAbility(character));
         }
     }

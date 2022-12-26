@@ -16,7 +16,8 @@ namespace GameBI.Model
     public abstract class IActiveAbility
     {
         public string Name { get; set; }
-        protected int turnNext { get; set; }
+        public int turnNext { get; set; }
+        public int turn { get; set; }
         public abstract void ActivateActiveAbility(Map map, Character character);
         public IActiveAbility()
         {
