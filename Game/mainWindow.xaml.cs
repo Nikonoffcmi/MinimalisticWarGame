@@ -70,17 +70,17 @@ namespace GameUI
                 }
 
             if (gameScene.isGameEnd)
-                Deserializer();
-            else
             {
-                var btn = gameScene.StartGame();
-                foreach (var b in btn)
-                {
-                    buttons[((int)b.X), ((int)b.Y)].Background = Brushes.Yellow;
-                }
+                Deserializer();
             }
+            var btn = gameScene.StartGame();
 
             UpdateMap();
+            foreach (var b in btn)
+            {
+                buttons[((int)b.X), ((int)b.Y)].Background = Brushes.Yellow;
+            }
+
             Main.Children.Add(myGrid);
         }
 
@@ -114,12 +114,15 @@ namespace GameUI
             var buttonPosition = new Vector((int)((buttonLocation.X - Left) / pressedButton.ActualWidth),
                 (int)((buttonLocation.Y - Top) / pressedButton.ActualHeight));
 
-            if (pressedButton.Content != null && gameScene.currPlayer.Select(c => c.Position).Contains(buttonPosition))
+            var allch = new List<Character>(gameScene.charactersPlayerOne);
+            allch.AddRange(gameScene.charactersPlayerTwo);
+            if (pressedButton.Content != null && allch.Select(c => c.Position).Contains(buttonPosition))
             {
-                labelHP.Content = gameScene.currPlayer.Find(c => c.Position == buttonPosition).HPModified.ToString();
-                labelDamage.Content = gameScene.currPlayer.Find(c => c.Position == buttonPosition).DamageModified.ToString();
-                labelDistanceMove.Content = gameScene.currPlayer.Find(c => c.Position == buttonPosition).distanceMove.ToString();
-                labelDistanceAttack.Content = gameScene.currPlayer.Find(c => c.Position == buttonPosition).distanceAttack.ToString();
+                labelName.Content = allch.Find(c => c.Position == buttonPosition).Name.ToString();
+                labelHP.Content = allch.Find(c => c.Position == buttonPosition).HPModified.ToString();
+                labelDamage.Content = allch.Find(c => c.Position == buttonPosition).DamageModified.ToString();
+                labelDistanceMove.Content = allch.Find(c => c.Position == buttonPosition).distanceMove.ToString();
+                labelDistanceAttack.Content = allch.Find(c => c.Position == buttonPosition).distanceAttack.ToString();
                 var lists = gameScene.CharacterAbilities(buttonPosition);
                 listBox.Items.Clear();
                 foreach (var list in lists)
@@ -127,7 +130,16 @@ namespace GameUI
                     listBox.Items.Add(list);
                 }
             }
-                
+            else
+            {
+                labelName.Content = null;
+                labelHP.Content = null;
+                labelDamage.Content = null;
+                labelDistanceMove.Content = null;
+                labelDistanceAttack.Content = null;
+                listBox.Items.Clear();
+            }
+
 
             var btn = gameScene.OnCharacterPressMove(buttonPosition);
             UpdateMap();
@@ -135,6 +147,10 @@ namespace GameUI
             {
                 buttons[((int)b.X), ((int)b.Y)].Background = Brushes.Yellow;
             }
+
+            if (gameScene.isGameEnd)
+                GameStartOver();
+
             Serializer();
         }
 
@@ -252,13 +268,27 @@ namespace GameUI
                     Scene scene = (Scene)s.Deserialize(reader);
                     gameScene = scene.game;
                 }
-            }
+            }            
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
+            GameStartOver();
+        }
+
+        private void GameStartOver()
+        {
             LoadScene();
             UpdateMap();
+            gameScene.isGameEnd = true;
+
+            var btn = gameScene.StartGame();
+            foreach (var b in btn)
+            {
+                buttons[((int)b.X), ((int)b.Y)].Background = Brushes.Yellow;
+            }
+
+            Serializer();
         }
     }
 }

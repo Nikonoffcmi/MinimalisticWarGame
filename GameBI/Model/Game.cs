@@ -58,13 +58,20 @@ namespace GameBI.Model
 
         public List<Vector> StartGame()
         {
-            currPlayer = charactersPlayerOne;
             map.SetCell(objects.Where(b => b.GetType() == typeof(GameBarrier)).ToList());
             map.SetCell(charactersPlayerOne.ToList<Object>());
             map.SetCell(charactersPlayerTwo.ToList<Object>());
+            if (isGameEnd)
+            {
+                isGameEnd = false;
+                currPlayer = charactersPlayerOne;
+            }
 
-            isGameEnd = false;
-            currPlayer = charactersPlayerOne;
+            if (currPlayer.Select(ch => ch.Position).ToList()
+                .Contains(charactersPlayerOne.Select(ch => ch.Position).ToList()[0]))
+                currPlayer = charactersPlayerOne;
+            else
+                currPlayer = charactersPlayerTwo;
             return currPlayer.Select(ch => ch.Position).ToList();
         }
 
@@ -81,7 +88,8 @@ namespace GameBI.Model
             }
             else
             {
-                if (map.isCellObject<Character>((int)location.Y, (int)location.X))
+                if (map.isCellObject<Character>((int)location.Y, (int)location.X)
+                    && currCharater.AvailableAttacks(map).Contains(location))
                 {
                     var ch = charactersPlayerOne.ToList();
                     ch.AddRange(charactersPlayerTwo.ToList());
@@ -109,7 +117,9 @@ namespace GameBI.Model
 
         public List<string> CharacterAbilities(Vector position)
         {
-            return currPlayer.ToList().Find(ch => ch.Position == position).ActiveAbilities.Select(aa => aa.Name).ToList();
+            var allch = new List<Character>(charactersPlayerOne);
+            allch.AddRange(charactersPlayerTwo);
+            return allch.ToList().Find(ch => ch.Position == position).ActiveAbilities.Select(aa => aa.Name).ToList();
         }
 
         public List<Vector> ActiveAbilitiesDistans(string activeAbility)
@@ -129,6 +139,8 @@ namespace GameBI.Model
 
         public List<Vector> SkipTurn()
         {
+            currCharater = null;
+            currActiveAbility = null;
             SwitchPlayer();
             return currPlayer.Select(ch => ch.Position).ToList();
         }
@@ -136,12 +148,17 @@ namespace GameBI.Model
         private void SwitchPlayer()
         {
             var liveCharater = 0;
-            for (int i = 0; i < currPlayer.Count(); i++)
+            var tempPlayer = new List<Character>(currPlayer);
+
+            for (int i = 0; i < tempPlayer.Count(); i++)
             {
-                if (currPlayer[i].IsAlive())
+                if (tempPlayer[i].IsAlive())
                     liveCharater++;
                 else
-                    currPlayer.Remove(currPlayer[i]);
+                {
+                    currPlayer.Remove(tempPlayer[i]);
+                    map.SetCell(new List<Object>() { new Object(null, null, tempPlayer[i].Position) });
+                }
             }
             if (liveCharater == 0)
                 isGameEnd = true;
@@ -152,15 +169,19 @@ namespace GameBI.Model
                 currPlayer = charactersPlayerOne;
 
             liveCharater = 0;
-            for (int i = 0; i < currPlayer.Count(); i++)
+            tempPlayer = new List<Character>(currPlayer);
+            for (int i = 0; i < tempPlayer.Count(); i++)
             {
-                if (currPlayer[i].IsAlive())
+                if (tempPlayer[i].IsAlive())
                 {
                     liveCharater++;
-                    currPlayer[i].NewTurn(currPlayer[i]);
+                    tempPlayer[i].NewTurn(tempPlayer[i]);
                 }
                 else
-                    currPlayer.Remove(currPlayer[i]);
+                {
+                    currPlayer.Remove(tempPlayer[i]);
+                    map.SetCell(new List<Object>() { new Object(null, null, tempPlayer[i].Position) });
+                }
             }
             if (liveCharater == 0)
                 isGameEnd = true;

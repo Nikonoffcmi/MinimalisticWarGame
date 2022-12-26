@@ -129,24 +129,32 @@ namespace GameBI.Model
             int x = 0, y = 0;
             for (y = 1, x = 0; y <= distanceAttack && (int)Position.Y + y < map.map.GetLength(0); y++)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
             for (y = -1, x = 0; y <= -distanceAttack && (int)Position.Y + y >= 0; y--)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
             for (y = 0, x = 1; x <= distanceAttack && (int)Position.X + x < map.map.GetLength(1); x++)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
 
             for (y = 0, x = -1; x <= -distanceAttack && (int)Position.X + x >= 0; x--)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
@@ -154,6 +162,8 @@ namespace GameBI.Model
             for (y = 1, x = 1; y <= distanceAttack && (int)Position.X + x < map.map.GetLength(1) 
                 && (int)Position.Y + y < map.map.GetLength(0); y++, x++)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
@@ -161,6 +171,8 @@ namespace GameBI.Model
             for (y = -1, x = -1; y <= -distanceAttack && (int)Position.X + x >= 0
                 && (int)Position.Y + y >= 0; y--, x--)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
@@ -168,6 +180,8 @@ namespace GameBI.Model
             for (y = -1, x = 1; y <= -distanceAttack && (int)Position.X + x < map.map.GetLength(1)
                 && (int)Position.Y + y >= 0; y--, x++)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }
@@ -175,6 +189,8 @@ namespace GameBI.Model
             for (y = 1, x = -1; y <= distanceAttack && (int)Position.X + x >= 0
                 && (int)Position.Y + y < map.map.GetLength(0); y++, x--)
             {
+                if (map.isCellObject<GameBarrier>((int)Position.Y + y, (int)Position.X + x))
+                    break;
                 if (map.isCellObject<Character>((int)Position.Y + y, (int)Position.X + x))
                     list.Add(new Vector(Position.X + x, Position.Y + y));
             }

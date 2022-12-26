@@ -7,13 +7,21 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid x:Name="Main">
-        <ListBox x:Name="listBox" HorizontalAlignment="Right" Width="285" Background="{x:Null}" Foreground="Black" Margin="0,217,0,0" SelectionChanged="listBox_SelectionChanged"/>
+        <ListBox x:Name="listBox" HorizontalAlignment="Right" Width="322" Background="{x:Null}" Foreground="Black" Margin="0,217,0,0" SelectionChanged="listBox_SelectionChanged"/>
         <Button Content="Пропуск хода" HorizontalAlignment="Left" Margin="515,10,0,0" VerticalAlignment="Top" BorderBrush="White" Click="Button_Click"/>
         <Button Content="Отмена действия" HorizontalAlignment="Left" Margin="658,10,0,0" VerticalAlignment="Top" BorderBrush="White" Click="Button_Click_1"/>
-        <Label x:Name="labelHP" Content="Hp" HorizontalAlignment="Left" Margin="538,158,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="labelDamage" Content="атака" HorizontalAlignment="Left" Margin="604,158,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="labelDistanceMove" Content="дистанция" HorizontalAlignment="Left" Margin="669,158,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="labelDistanceAttack" Content="дис" HorizontalAlignment="Left" Margin="752,171,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelHP" Content="" HorizontalAlignment="Left" Margin="497,175,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelDamage" Content="" HorizontalAlignment="Left" Margin="591,175,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelDistanceMove" Content="" HorizontalAlignment="Left" Margin="686,183,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelDistanceAttack" Content="" HorizontalAlignment="Left" Margin="750,175,0,0" VerticalAlignment="Top"/>
         <Button Content="Начать игру сначала" HorizontalAlignment="Left" Margin="515,58,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.833,0.403" Click="Button_Click_2"/>
+        <Label Content="Имя персонажа" HorizontalAlignment="Left" Margin="478,113,0,0" VerticalAlignment="Top"/>
+        <Label x:Name="labelName" Content="" HorizontalAlignment="Left" Margin="620,113,0,0" VerticalAlignment="Top"/>
+        <Label Content="Здоровье" HorizontalAlignment="Left" Margin="478,144,0,0" VerticalAlignment="Top"/>
+        <Label Content="Атака" HorizontalAlignment="Left" Margin="589,144,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дистанция" HorizontalAlignment="Left" Margin="657,141,0,0" VerticalAlignment="Top" Height="31" Width="69"/>
+        <Label Content="передвижения" HorizontalAlignment="Left" Margin="647,157,0,0" VerticalAlignment="Top"/>
+        <Label Content="Дистанция" HorizontalAlignment="Left" Margin="726,141,0,0" VerticalAlignment="Top" Height="31" Width="69"/>
+        <Label Content="атаки" HorizontalAlignment="Left" Margin="740,157,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>
