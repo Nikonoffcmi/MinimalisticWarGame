@@ -29,7 +29,7 @@ namespace GameUI
     {
         public Game gameScene = new Game();
 
-        public string pathtoscene = @"C:\Users\Марина\OneDrive\Документы\депрессия\2 год\3 семестр\Программирование\лаба 7\MinimalisticWarGame\Engine\bin\Debug\scenegame.xml";
+        public string pathtoscene = @"C:\Users\Программирование\лаба 7\MinimalisticWarGame\Engine\bin\Debug\scenegame.xml";
         public Button prevButton;
 
         public Button[,] buttons;
