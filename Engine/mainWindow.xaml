@@ -19,7 +19,7 @@
         <Button x:Name="button_Copy" Content="Изменить объект" HorizontalAlignment="Right" Margin="0,0,140,5" VerticalAlignment="Bottom" Width="145" Click="button_Copy_Click"/>
         <Button x:Name="button_Copy1" Content="Выбрать сцену" HorizontalAlignment="Left" Margin="10,0,0,5" VerticalAlignment="Bottom" Width="209" Click="button_Copy1_Click"/>
         <Button x:Name="button_Copy2" Content="Сериализировать" Margin="224,0,359,5" VerticalAlignment="Bottom" Click="button_Copy2_Click"/>
-        <TextBox x:Name="textBox_Copy1" Height="23" Margin="10,0,359,30" TextWrapping="Wrap" Text="scene1.yagir" VerticalAlignment="Bottom"/>
+        <TextBox x:Name="textBox_Copy1" Height="23" Margin="10,0,359,30" TextWrapping="Wrap" Text="scenegame.xml" VerticalAlignment="Bottom"/>
         <Button x:Name="button_Copy3" Content="Удалить" HorizontalAlignment="Right" Margin="0,0,0,5" VerticalAlignment="Bottom" Width="135" Click="button_Copy3_Click"/>
         <TextBox x:Name="X" HorizontalAlignment="Left" Height="23" Margin="10,164,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
         <TextBox x:Name="Y" HorizontalAlignment="Left" Height="23" Margin="10,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="209"/>
